@@ -22,6 +22,8 @@ module fp_mult(a,b,c);
         
         /*NOTE: If i remove this segment of checking for overflow/underflow :if the exponent is 64 it'll round to some 6 bit value and
         the Exception block will consider it as normal exponent */
+        /* In this case We check for underflow/overflow for input also and send either flags to exception unit or push the result to some value 
+        which the exception unit will identify as underflow/overflow */
         
         //checking for underflow/overflow
         if ( (ea + eb) <= 31) begin        
@@ -32,8 +34,8 @@ module fp_mult(a,b,c);
         end
         else begin
         e_temp = ea + eb - 31;
-        mant = ma * mb;//leaving 20 bits for rounding
-        exp = mant[19] ? e_temp+1'b1 : e_temp;
+            mant = m_temp[19] ? m_temp[18:6] : m_temp[17:5]; //taking 4 bits extra for rounding
+        exp = m_temp[19] ? e_temp+1'b1 : e_temp;	
         s=sa ^ sb;
           //checking for special cases
          if( a==16'hFFFF | b==16'hFFFF ) begin
