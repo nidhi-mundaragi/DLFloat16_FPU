@@ -34,7 +34,7 @@ module fp_mult(a,b,c);
         end
         else begin
         e_temp = ea + eb - 31;
-            mant = m_temp[19] ? m_temp[18:6] : m_temp[17:5]; //taking 4 bits extra for rounding
+            mant = m_temp[19] ? m_temp[18:10] : m_temp[17:9]; //taking 4 bits extra for rounding
         exp = m_temp[19] ? e_temp+1'b1 : e_temp;	
         s=sa ^ sb;
           //checking for special cases
