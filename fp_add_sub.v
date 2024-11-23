@@ -1,10 +1,10 @@
-module fp_add_sub(input [15:0] a, input [15:0] b,input op,output reg [15:0] c_add);
+module dl_add_sub(input [15:0] a, input [15:0] b,input op,output reg [19:0] c_out, input clk);
    
-   	
+  reg [19:0] c_add;
     reg    [5:0] Num_shift_80; 
     reg    [5:0]  Larger_exp_80,Final_expo_80;
     reg    [9:0] Small_exp_mantissa_80,S_mantissa_80,L_mantissa_80,Large_mantissa_80;
-    reg    [8:0] Final_mant_80;
+  reg    [12:0] Final_mant_80;
     reg    [10:0] Add_mant_80,Add1_mant_80;
     reg    [5:0]  e1_80,e2_80;
     reg    [8:0] m1_80,m2_80;
@@ -12,7 +12,10 @@ module fp_add_sub(input [15:0] a, input [15:0] b,input op,output reg [15:0] c_ad
     reg    [8:0]  renorm_shift_80;
     reg signed [5:0] renorm_exp_80;
     reg signed [5:0] larger_expo_neg;
-   
+  always@(posedge clk)
+    begin
+      c_out<=c_add;
+    end
     
     always@(*) begin
         //stage 1
@@ -183,7 +186,7 @@ module fp_add_sub(input [15:0] a, input [15:0] b,input op,output reg [15:0] c_ad
                      c_add=16'hFFFF;
                end      
 	      
-               Final_mant_80 = Add1_mant_80[8:0]; 
+      Final_mant_80 = {Add1_mant_80,2'b00}; 
 	       
                //checking for special cases
                if( a==16'hFFFF | b==16'hFFFF) begin
