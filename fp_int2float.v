@@ -32,7 +32,7 @@ odule fp_int2float(
         // Normalize the number 
         exponent = 0;
         mantissa = 0;
-        
+        //NOTE: might get synth warnings for else block path but when i tried to add else block to exit from the loop threw synth errros
       // Find the exponent (shift the number to be in the form 1.xxxx)
        for (i = 0; i < 32 ; i = i + 1) begin
         if (abs_input >= (1 << (exponent + 1))) begin
