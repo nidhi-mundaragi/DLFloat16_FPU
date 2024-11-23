@@ -1,13 +1,26 @@
 module fp_compare( input [15:0] a1,
                   input [15:0] b1,
                   input [1:0] opcode,
-                  output [15:0] c1
+                  input clk,
+                  input rst_n,
+                  output reg [15:0] c_out
                  );
   wire lt_80,gt_80,eq_80;
+  wire [15:0] c_1;
   
   compare fp_comp ( a1,b1,lt_80,gt_80,eq_80 );
   
-  compare_out comp_out ( lt_80,gt_80,eq_80,opcode,c1);//sets the rd to flag value depending on instruction
+  compare_out comp_out ( lt_80,gt_80,eq_80,opcode,c_1);
+
+
+ always @(posedge clk) begin
+  if(!rst_n) begin
+   c_out <=0;
+  end 
+  else begin
+  c_out <= c_1;
+  end
+ end
   
 endmodule
 
