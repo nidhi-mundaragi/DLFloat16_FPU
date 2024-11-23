@@ -1,10 +1,14 @@
-module fp_mac(a,b,d,c_out);
+// Code your design here
+module dl_mac(a,b,d,c_out,clk);
+  input clk;
   input [15:0]a,b,d;
-  output reg [15:0]c_out;
+  output reg [19:0]c_out;
   wire [15:0]fprod,fadd;
-  
+  reg [19:0] c_mac;
   fpmac_mult mul(a,b,fprod);
-  fpmac_adder add(fprod,d,c_out);
+  fpmac_adder add(fprod,d,c_mac);
+  always@(posedge clk)
+    c_out<=c_mac;
   
 endmodule 
   
@@ -69,7 +73,7 @@ module fpmac_mult(a,b,c_mul1);
 	wire _unused = &{m_temp[8:0], 9'b0};
 endmodule 
  
-module fpmac_adder(input [15:0] a1, input [15:0] b1,output reg [15:0] c_add);
+module fpmac_adder(input [15:0] a1, input [15:0] b1,output reg [19:0] c_add);
    
    	
     reg    [5:0] Num_shift_80; 
@@ -270,7 +274,7 @@ module fpmac_adder(input [15:0] a1, input [15:0] b1,output reg [15:0] c_add);
                      c_add=16'hFFFF;
                end      
 	      
-               Final_mant_80 = Add1_mant_80[8:0]; 
+             Final_mant_80 = {Add1_mant_80,2'b00}; 
 	       
                //checking for special cases
                if( a1==16'hFFFF | b1==16'hFFFF) begin
