@@ -1,7 +1,7 @@
-odule fp_int2float(
+module fp_int2float(
   input signed [31:0] in_int, 
   input clk,
-  input rst_n,
+
   output reg [15:0] float_out1  
 );
     reg [5:0] exponent;   
@@ -12,11 +12,10 @@ odule fp_int2float(
     integer i;
     
     always @(posedge clk) begin
-     if (rst_n) begin
-       float_out1 <= 16'b0;
-      end else begin
+   
+   
        float_out1 <= float_out;
-      end
+   
      end 
        
     always @(*) begin
