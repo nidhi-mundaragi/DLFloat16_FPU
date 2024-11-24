@@ -2,7 +2,7 @@ module fp_compare( input [15:0] a1,
                   input [15:0] b1,
                   input [1:0] opcode,
                   input clk,
-                  input rst_n,
+    
                   output reg [15:0] c_out
                  );
   wire lt_80,gt_80,eq_80;
@@ -14,12 +14,8 @@ module fp_compare( input [15:0] a1,
 
 
  always @(posedge clk) begin
-  if(!rst_n) begin
-   c_out <=0;
-  end 
-  else begin
   c_out <= c_1;
-  end
+  
  end
   
 endmodule
