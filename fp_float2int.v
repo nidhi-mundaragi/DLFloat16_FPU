@@ -22,24 +22,20 @@ module float16_to_int32(
       // Infinity or NaN: saturate to max 32-bit signed integer
       int_out = sign ? -32'h80000000 : 32'h7FFFFFFF;
     end else begin
-      // Normalized number
+  
       actual_exponent = exponent - 31; // Unbias the exponent
       
       if (actual_exponent <=9) begin
-        // Left shift for +ve exponent
         result = {23'b0, mantissa >> ( 9 - actual_exponent)};
         end else begin
-        // Right shift for -ve exponent
-        result = mantissa >> (actual_exponent - 9);
+        result = mantissa << (actual_exponent - 9);
       end 
-     
-
-      // Apply sign
+    
       int_out = sign ? -result : result;
 
-    /*  // Clamp to 32-bit signed range
+      // Clamp to 32-bit signed range
       if (int_out > 32'h7FFFFFFF) int_out = 32'h7FFFFFFF;
-      if (int_out < -32'h80000000) int_out = -32'h80000000; */
+      if (int_out < -32'h80000000) int_out = -32'h80000000; 
     end
   end
 endmodule
