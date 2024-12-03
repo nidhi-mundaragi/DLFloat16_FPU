@@ -1,4 +1,4 @@
-//+inf = 7e00, -inf = fe00, +NaN = 7fff, -Nan= ffff, +0 =0000, -0 =8000
+//+inf = 7fff, -inf = ffff, +NaN = 7fff, -Nan= ffff, +0 =0000, -0 =8000
 module dlfloat_div(
     input [15:0] a, b,
     input clk, rst_n,
@@ -47,27 +47,27 @@ module dlfloat_div(
         invalid = 1'b0;
 
         // Special Cases
-      if(( b == 16'b0 || b==16'b1000000000000000) &&(a==16'b0 || a==16'b1000000000000000))
+        if(( b == 16'b0 || b==16'b1000000000000000) &&(a==16'b0 || a==16'b1000000000000000)) //0/0
             begin
               c_div1 = {sa ^sb,15'b111111111111111,4'b0};
               invalid = 1'b1;
             end
       
-       else if (b == 16'b0 || b == 16'b1000000000000000) begin
+        else if (b == 16'b0 || b == 16'b1000000000000000) begin //num/0
             
             div_by_zero = 1'b1;
-            c_div1 = {sa ^ sb, 6'b111111, 13'b0};
-        end else if (a == 16'hfe00 || a == 16'h7e00) begin
+            c_div1 = {sa ^ sb, 15'b111111111111111, 4'b0};
+        end else if (a == 16'hffff || a == 16'h7fff) begin // dividend = inf
             
-          if (b == 16'hFe00 || b == 16'h7e00) begin
+            if (b == 16'hFfff || b == 16'h7fff) begin //inf/inf
                 
                 invalid = 1'b1;
             c_div1 = {sa ^sb,15'b111111111111111,4'b0}; 
             end else begin
                
-                c_div1 = {sa ^ sb, 6'b111111, 13'b0}; 
+                c_div1 = {sa ^ sb, 15'b111111111111111, 4'b0}; 
             end
-        end else if (b == 16'hfe00 || b == 16'h7e00) begin
+        end else if (b == 16'hffff || b == 16'h7fff) begin //divisor is inf
            
             c_div1 = {sa ^ sb, 19'b0};
         end else if (a == 16'b0 || a == 16'b1000000000000000) begin
