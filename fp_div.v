@@ -1,4 +1,3 @@
-//+inf = 7fff, -inf = ffff, +NaN = 7fff, -Nan= ffff, +0 =0000, -0 =8000
 module dlfloat_div(
     input [15:0] a, b,
     input clk, rst_n,
